@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const inputs = formulario.querySelectorAll("input");
     const nombreInput = document.getElementById("nombre");
 
-    // Crear el título dinámico
     const titulo = document.createElement("h2");
     titulo.textContent = "HOLA";
     titulo.style.marginBottom = "20px";
