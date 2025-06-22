@@ -65,35 +65,60 @@ document.addEventListener("DOMContentLoaded", function () {
         const valor = input.value.trim();
         const id = input.id;
         let mensaje = "";
-
         switch (id) {
             case "nombre":
-                if (valor.length <= 6 || !valor.includes(" ")) {
+                if (valor.length <= 6 || valor.indexOf(" ") === -1) {
                     mensaje = "Debe tener más de 6 letras y un espacio.";
                 }
                 break;
             case "email":
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
+                if (valor.indexOf("@") === -1 || valor.indexOf(".") === -1 || valor.indexOf("@") > valor.lastIndexOf(".")) {
                     mensaje = "Formato de email inválido.";
                 }
                 break;
             case "password":
-                if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(valor)) {
+                var tieneLetra = false;
+                var tieneNumero = false;
+                for (var i = 0; i < valor.length; i++) {
+                    var char = valor[i];
+                    if ((char >= "a" && char <= "z") || (char >= "A" && char <= "Z")) {
+                        tieneLetra = true;
+                    }
+                    if (char >= "0" && char <= "9") {
+                        tieneNumero = true;
+                    }
+                }
+                if (valor.length < 8 || !tieneLetra || !tieneNumero) {
                     mensaje = "Al menos 8 caracteres con letras y números.";
                 }
                 break;
             case "edad":
-                if (!/^[0-9]+$/.test(valor) || parseInt(valor) < 18) {
+                var edad = parseInt(valor);
+                if (isNaN(edad) || edad < 18) {
                     mensaje = "Debe ser un número mayor o igual a 18.";
                 }
                 break;
             case "telefono":
-                if (!/^\d{7,}$/.test(valor)) {
+                var esNumero = true;
+                for (var i = 0; i < valor.length; i++) {
+                    if (valor[i] < "0" || valor[i] > "9") {
+                        esNumero = false;
+                        break;
+                    }
+                }
+                if (valor.length < 7 || !esNumero) {
                     mensaje = "Número inválido, mínimo 7 dígitos, sin símbolos.";
                 }
                 break;
             case "direccion":
-                if (valor.length < 5 || !/\d/.test(valor) || !/[a-zA-Z]/.test(valor) || !valor.includes(" ")) {
+                var tieneNum = false;
+                var tieneLetras = false;
+                for (var i = 0; i < valor.length; i++) {
+                    var c = valor[i];
+                    if (c >= "0" && c <= "9") tieneNum = true;
+                    if ((c >= "a" && c <= "z") || (c >= "A" && c <= "Z")) tieneLetras = true;
+                }
+                if (valor.length < 5 || !tieneNum || !tieneLetras || valor.indexOf(" ") === -1) {
                     mensaje = "Debe tener letras, números y un espacio.";
                 }
                 break;
@@ -108,11 +133,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 break;
             case "DNI":
-                if (!/^\d{7,8}$/.test(valor)) {
+                if (valor.length < 7 || valor.length > 8) {
                     mensaje = "Debe tener 7 u 8 dígitos numéricos.";
+                } else {
+                    for (var i = 0; i < valor.length; i++) {
+                        if (valor[i] < "0" || valor[i] > "9") {
+                            mensaje = "Debe tener solo números.";
+                            break;
+                        }
+                    }
                 }
                 break;
         }
+
 
         if (mensaje) {
             mostrarError(input, mensaje);
