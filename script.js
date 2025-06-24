@@ -1,156 +1,141 @@
 document.addEventListener("DOMContentLoaded", function () {
     const formulario = document.querySelector(".formulario");
-    const inputs = formulario.querySelectorAll("input");
-    const nombreInput = document.getElementById("nombre");
+    const saludo = document.createElement("h2");
+    saludo.textContent = "HOLA";
+    saludo.style.marginBottom = "20px";
+    formulario.insertBefore(saludo, formulario.firstChild);
 
-    const titulo = document.createElement("h2");
-    titulo.textContent = "HOLA";
-    titulo.style.marginBottom = "20px";
-    formulario.insertBefore(titulo, formulario.firstChild);
+    const campos = [
+        {
+            label: "Nombre Completo",
+            id: "nombre",
+            validar: (v) => v.length > 6 && v.includes(" "),
+            mensaje: "Debe tener más de 6 letras y al menos un espacio.",
+        },
+        {
+            label: "Correo Electrónico",
+            id: "email",
+            validar: (v) => v.includes("@") && v.includes("."),
+            mensaje: "Formato de email inválido.",
+        },
+        {
+            label: "Contraseña",
+            id: "password",
+            validar: (v) => v.length >= 8 && /[a-zA-Z]/.test(v) && /[0-9]/.test(v),
+            mensaje: "Debe tener al menos 8 caracteres con letras y números.",
+        },
+        {
+            label: "Edad",
+            id: "edad",
+            validar: (v) => !isNaN(v) && parseInt(v) >= 18,
+            mensaje: "Debe ser mayor o igual a 18.",
+        },
+        {
+            label: "Teléfono",
+            id: "telefono",
+            validar: (v) => v.length >= 7 && !isNaN(v),
+            mensaje: "Número inválido, mínimo 7 dígitos.",
+        },
+        {
+            label: "Dirección",
+            id: "direccion",
+            validar: (v) =>
+                v.length >= 5 &&
+                /[a-zA-Z]/.test(v) &&
+                /\d/.test(v) &&
+                v.includes(" "),
+            mensaje: "Debe tener letras, números y un espacio.",
+        },
+        {
+            label: "Ciudad",
+            id: "ciudad",
+            validar: (v) => v.length >= 3,
+            mensaje: "Debe tener al menos 3 caracteres.",
+        },
+        {
+            label: "Código Postal",
+            id: "codigo",
+            validar: (v) => v.length >= 3,
+            mensaje: "Debe tener al menos 3 caracteres.",
+        },
+        {
+            label: "DNI",
+            id: "DNI",
+            validar: (v) => (v.length === 7 || v.length === 8) && !isNaN(v),
+            mensaje: "Debe tener 7 u 8 dígitos numéricos.",
+        },
+    ];
 
-    nombreInput.addEventListener("focus", actualizarTitulo);
-    nombreInput.addEventListener("keydown", actualizarTitulo);
-
-    function actualizarTitulo() {
-        setTimeout(() => {
-            const nombre = nombreInput.value.trim();
-            titulo.textContent = nombre ? `HOLA ${nombre}` : "HOLA";
-        }, 0);
+    const datosGuardados = localStorage.getItem("datosSuscripcion");
+    if (datosGuardados) {
+        const datos = JSON.parse(datosGuardados);
+        campos.forEach(({ id }) => {
+            const input = document.getElementById(id);
+            if (input && datos[id]) input.value = datos[id];
+        });
     }
 
-    inputs.forEach(input => {
-        input.addEventListener("blur", () => validarCampo(input));
-        input.addEventListener("focus", () => limpiarError(input));
+    const nombreInput = document.getElementById("nombre");
+    nombreInput.addEventListener("input", () => {
+        const nombre = nombreInput.value.trim();
+        saludo.textContent = nombre ? `HOLA ${nombre.toUpperCase()}` : "HOLA";
     });
 
     formulario.addEventListener("submit", function (e) {
         e.preventDefault();
-        let errores = [];
-        let datos = [];
 
-        inputs.forEach(input => {
-            const valido = validarCampo(input);
-            if (!valido.ok) {
-                errores.push(valido.mensaje);
+        let errores = 0;
+        let mensaje = "";
+        const datos = {};
+
+        campos.forEach(({ id, label, validar, mensaje: msj }) => {
+            const input = document.getElementById(id);
+            const valor = input.value.trim();
+            const valido = validar(valor);
+
+            const errorEl = input.parentElement.querySelector(".error");
+            if (errorEl) errorEl.remove();
+
+            if (!valido) {
+                errores++;
+                mensaje += `- ${label}: ${msj}\n`;
+                const errorDiv = document.createElement("div");
+                errorDiv.className = "error";
+                errorDiv.style.color = "red";
+                errorDiv.style.marginTop = "5px";
+                errorDiv.textContent = msj;
+                input.parentElement.appendChild(errorDiv);
             } else {
-                datos.push(`${input.placeholder}: ${input.value}`);
+                datos[id] = valor;
             }
         });
 
-        if (errores.length > 0) {
-            alert("Errores encontrados:\n" + errores.join("\n"));
-        } else {
-            alert("Datos ingresados:\n" + datos.join("\n"));
+        if (errores > 0) {
+            alert("Errores encontrados:\n" + mensaje);
+            return;
         }
+
+        const query = new URLSearchParams(datos).toString();
+        const url = "https://jsonplaceholder.typicode.com/posts?" + query;
+
+        fetch(url)
+            .then(() => {
+                mostrarModal("Suscripción exitosa", JSON.stringify(datos, null, 2));
+                localStorage.setItem("datosSuscripcion", JSON.stringify(datos));
+            })
+            .catch((error) => {
+                mostrarModal("Error al enviar", error.message);
+            });
     });
 
-    function mostrarError(input, mensaje) {
-        let error = input.parentElement.querySelector(".error");
-        if (!error) {
-            error = document.createElement("div");
-            error.className = "error";
-            error.style.color = "red";
-            error.style.marginTop = "5px";
-            input.parentElement.appendChild(error);
-        }
-        error.textContent = mensaje;
+    function mostrarModal(titulo, mensaje) {
+        const modal = document.getElementById("modal");
+        document.getElementById("modalTitulo").textContent = titulo;
+        document.getElementById("modalMensaje").textContent = mensaje;
+        modal.classList.remove("oculto");
     }
 
-    function limpiarError(input) {
-        const error = input.parentElement.querySelector(".error");
-        if (error) error.remove();
-    }
-
-    function validarCampo(input) {
-        const valor = input.value.trim();
-        const id = input.id;
-        let mensaje = "";
-        switch (id) {
-            case "nombre":
-                if (valor.length <= 6 || valor.indexOf(" ") === -1) {
-                    mensaje = "Debe tener más de 6 letras y un espacio.";
-                }
-                break;
-            case "email":
-                if (valor.indexOf("@") === -1 || valor.indexOf(".") === -1 || valor.indexOf("@") > valor.lastIndexOf(".")) {
-                    mensaje = "Formato de email inválido.";
-                }
-                break;
-            case "password":
-                var tieneLetra = false;
-                var tieneNumero = false;
-                for (var i = 0; i < valor.length; i++) {
-                    var char = valor[i];
-                    if ((char >= "a" && char <= "z") || (char >= "A" && char <= "Z")) {
-                        tieneLetra = true;
-                    }
-                    if (char >= "0" && char <= "9") {
-                        tieneNumero = true;
-                    }
-                }
-                if (valor.length < 8 || !tieneLetra || !tieneNumero) {
-                    mensaje = "Al menos 8 caracteres con letras y números.";
-                }
-                break;
-            case "edad":
-                var edad = parseInt(valor);
-                if (isNaN(edad) || edad < 18) {
-                    mensaje = "Debe ser un número mayor o igual a 18.";
-                }
-                break;
-            case "telefono":
-                var esNumero = true;
-                for (var i = 0; i < valor.length; i++) {
-                    if (valor[i] < "0" || valor[i] > "9") {
-                        esNumero = false;
-                        break;
-                    }
-                }
-                if (valor.length < 7 || !esNumero) {
-                    mensaje = "Número inválido, mínimo 7 dígitos, sin símbolos.";
-                }
-                break;
-            case "direccion":
-                var tieneNum = false;
-                var tieneLetras = false;
-                for (var i = 0; i < valor.length; i++) {
-                    var c = valor[i];
-                    if (c >= "0" && c <= "9") tieneNum = true;
-                    if ((c >= "a" && c <= "z") || (c >= "A" && c <= "Z")) tieneLetras = true;
-                }
-                if (valor.length < 5 || !tieneNum || !tieneLetras || valor.indexOf(" ") === -1) {
-                    mensaje = "Debe tener letras, números y un espacio.";
-                }
-                break;
-            case "ciudad":
-                if (valor.length < 3) {
-                    mensaje = "Mínimo 3 caracteres.";
-                }
-                break;
-            case "codigo":
-                if (valor.length < 3) {
-                    mensaje = "Mínimo 3 caracteres.";
-                }
-                break;
-            case "DNI":
-                if (valor.length < 7 || valor.length > 8) {
-                    mensaje = "Debe tener 7 u 8 dígitos numéricos.";
-                } else {
-                    for (var i = 0; i < valor.length; i++) {
-                        if (valor[i] < "0" || valor[i] > "9") {
-                            mensaje = "Debe tener solo números.";
-                            break;
-                        }
-                    }
-                }
-                break;
-        }
-
-
-        if (mensaje) {
-            mostrarError(input, mensaje);
-            return { ok: false, mensaje };
-        }
-        return { ok: true };
-    }
+    document.getElementById("cerrarModal").addEventListener("click", () => {
+        document.getElementById("modal").classList.add("oculto");
+    });
 });

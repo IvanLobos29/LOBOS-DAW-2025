@@ -14,46 +14,55 @@
         <img src="logosalud.webp" alt="logo">
         <header>Diario Saludable</header>
     </div>
-<main>
-    <form class="formulario">
-        <div class="formulario-campos">
-            <div class="campo">
-                <input type="text" id="nombre" placeholder="Nombre Completo">
+    <main>
+        <form class="formulario">
+            <div class="formulario-campos">
+                <div class="campo">
+                    <input type="text" id="nombre" placeholder="Nombre Completo">
+                </div>
+                <div class="campo">
+                    <input type="email" id="email" placeholder="Correo Electrónico">
+                </div>
+                <div class="campo">
+                    <input type="password" id="password" placeholder="Contraseña">
+                </div>
+                <div class="campo">
+                    <input type="text" id="edad" placeholder="Edad">
+                </div>
+                <div class="campo">
+                    <input type="text" id="telefono" placeholder="Teléfono">
+                </div>
+                <div class="campo">
+                    <input type="text" id="direccion" placeholder="Dirección">
+                </div>
+                <div class="campo">
+                    <input type="text" id="ciudad" placeholder="Ciudad">
+                </div>
+                <div class="campo">
+                    <input type="text" id="codigo" placeholder="Código Postal">
+                </div>
+                <div class="campo">
+                    <input type="text" id="DNI" placeholder="DNI">
+                </div>
             </div>
-            <div class="campo">
-                <input type="email" id="email" placeholder="Correo Electrónico">
-            </div>
-            <div class="campo">
-                <input type="password" id="password" placeholder="Contraseña">
-            </div>
-            <div class="campo">
-                <input type="text" id="edad" placeholder="Edad">
-            </div>
-            <div class="campo">
-                <input type="text" id="telefono" placeholder="Teléfono">
-            </div>
-            <div class="campo">
-                <input type="text" id="direccion" placeholder="Dirección">
-            </div>
-            <div class="campo">
-                <input type="text" id="ciudad" placeholder="Ciudad">
-            </div>
-            <div class="campo">
-                <input type="text" id="codigo" placeholder="Código Postal">
-            </div>
-            <div class="campo">
-                <input type="text" id="DNI" placeholder="DNI">
-            </div>
-        </div>
 
-        <div class="boton-enviar">
-            <input type="submit" value="Enviar">
-        </div>
-    </form>
-</main>
+            <div class="boton-enviar">
+                <input type="submit" value="Enviar">
+            </div>
+        </form>
+    </main>
     <footer class="pie">
         <p>&copy; 2025 Diario Saludable. Todos los derechos reservados.</p>
     </footer>
+
+    <div id="modal" class="oculto">
+        <div class="modal-contenido">
+            <span id="cerrarModal" class="cerrar">&times;</span>
+            <h2 id="modalTitulo"></h2>
+            <pre id="modalMensaje"></pre>
+        </div>
+    </div>
+
 
 
     <script src="script.js"></script>
