@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explorador Rick & Morty</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <header>
+        <h1>Explorador de Personajes</h1>
+        <p class="subtitulo">Rick & Morty API Viewer</p>
+    </header>
+
+    <main>
+        <section class="controles">
+            <form id="form-filtros">
+                <div class="grupo-filtros">
+                    <div class="filtro-item">
+                        <input type="text" id="filtro-nombre" placeholder="Buscar por nombre..." />
+                    </div>
+                    <div class="filtro-item">
+                        <select id="filtro-estado">
+                            <option value="">Estado</option>
+                            <option value="alive">Vivo</option>
+                            <option value="dead">Muerto</option>
+                            <option value="unknown">Desconocido</option>
+                        </select>
+                    </div>
+                    <div class="filtro-item">
+                        <input type="text" id="filtro-especie" placeholder="Especie..." />
+                    </div>
+                    <div class="filtro-item">
+                        <input type="text" id="filtro-tipo" placeholder="Tipo..." />
+                    </div>
+                    <div class="filtro-item">
+                        <select id="filtro-genero">
+                            <option value="">Género</option>
+                            <option value="female">Femenino</option>
+                            <option value="male">Masculino</option>
+                            <option value="genderless">Sin género</option>
+                            <option value="unknown">Desconocido</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grupo-botones">
+                    <button type="button" id="btn-todos">Ver Todos</button>
+                    <button type="submit">Filtrar</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="resultados">
+
+        </section>
+
+        <nav id="paginacion">
+            <button id="ant-pagina">◀</button>
+            <span id="info-pagina">Página</span>
+            <button id="sig-pagina">▶</button>
+        </nav>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 Proyecto Rick & Morty - UAI DAW</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

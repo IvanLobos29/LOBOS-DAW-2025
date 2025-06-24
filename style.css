@@ -1,0 +1,189 @@
+:root {
+    --bg-main: #f4f4f8;
+    --color-primario: #4a90e2;
+    --color-secundario: #2c3e50;
+    --color-texto: #333;
+    --color-acento: #e67e22;
+    --borde-claro: #ccc;
+    --sombra: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Helvetica Neue", sans-serif;
+    background-color: var(--bg-main);
+    color: var(--color-texto);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: var(--color-primario);
+    color: white;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 4px 8px var(--sombra);
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+}
+
+.subtitulo {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+main {
+    flex: 1;
+    padding: 1.5rem 2rem;
+}
+
+.controles {
+    margin-bottom: 2rem;
+}
+
+#form-filtros {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.grupo-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.filtro-item input,
+.filtro-item select {
+    padding: 1rem;
+    font-size: 1.1rem;
+    min-width: 220px;
+    border-radius: 8px;
+    border: 1px solid var(--borde-claro);
+    background-color: #ffffff;
+    color: var(--color-texto);
+    box-shadow: 0 2px 4px var(--sombra);
+}
+
+.grupo-botones {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.grupo-botones button {
+    padding: 0.9rem 2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-secundario);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.grupo-botones button:hover {
+    background-color: var(--color-acento);
+}
+
+#resultados {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.tarjeta-personaje {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px var(--sombra);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.tarjeta-personaje:hover {
+    transform: scale(1.02);
+}
+
+.tarjeta-personaje img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--borde-claro);
+}
+
+.info-personaje {
+    padding: 1rem;
+}
+
+.info-personaje h4 {
+    font-size: 1.2rem;
+    color: var(--color-primario);
+    margin-bottom: 0.5rem;
+}
+
+.info-personaje p {
+    font-size: 0.9rem;
+    margin: 0.3rem 0;
+}
+
+#error {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+}
+
+#paginacion {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+#paginacion button {
+    background-color: var(--color-primario);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#paginacion button:hover:not(:disabled) {
+    background-color: var(--color-acento);
+}
+
+#paginacion button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#info-pagina {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.footer {
+    text-align: center;
+    background-color: var(--color-secundario);
+    color: #fff;
+    padding: 1rem;
+    margin-top: auto;
+    font-size: 0.9rem;
+}
